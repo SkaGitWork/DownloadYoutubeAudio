@@ -1,0 +1,35 @@
+{
+  "name": "YouTube Downloader MP3",
+  "description": "Download from YouTube",
+  "version": "1.0",
+  "host_permissions": [
+    "https://*.youtube.com/*"
+  ],
+
+  "action": {
+    "default_title": "My YT Bookmarks",
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/downloadLogo.png"],
+      "matches": ["https://*.youtube.com/*"]
+    }
+  ],
+
+  "permissions": ["tabs", "downloads", "activeTab", "storage"],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://*.youtube.com/*"],
+      "js": ["js/jquery.js","js/main.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "options_page": "options.html",
+  "manifest_version": 3
+}

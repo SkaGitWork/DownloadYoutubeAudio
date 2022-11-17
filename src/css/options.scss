@@ -1,0 +1,30 @@
+html {
+  font-size: 24px;
+}
+
+input, button{
+  font-size: 0.7rem;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(0, 78%, 70%);
+}
+
+main {
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+  height: fit-content;
+}
+
+.container {
+  text-align: center;
+  padding: 0.5rem;
+  border: 1px solid hsl(0, 0%, 50%);
+  background-color: hsl(0, 78%, 90%);
+  margin-bottom: 1rem;
+}

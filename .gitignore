@@ -1,0 +1,6 @@
+node_modules
+.env
+.vscode
+ffmpeg
+Audio
+src/js/serverURL.js

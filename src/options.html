@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Extension for YouTube MP3 Downloading</title>
+    <link rel="stylesheet" href="css/options.css" />
+    <script type="module" src="js/jquery.js"></script>
+    <script type="module" src="js/options.js"></script>
+  </head>
+
+  <body>
+    <h1 style="text-align: center">YouTube MP3 Downloader</h1>
+    <main>
+      <!-- Import -->
+      <h2>Import Titles</h2>
+      <div class="container">
+        <label for="importInput">Import titles from folder</label>
+        <input id="importInput" type="file" webkitdirectory="true" directory />
+        <button id="importButton">Import</button>
+      </div>
+
+      <!-- Output location -->
+      <h2>Output location</h2>
+      <div class="container">
+        <label for="outputLocation">Output location :</label>
+        <input id="outputLocation" type="text" />
+
+        <!-- Instruction -->
+        <p>
+          Root folder is your default download location.<br />
+          Valid path exemple : 'music/'
+        </p>
+      </div>
+
+      <!-- Downloaded MP3 -->
+      <h2>Downloaded MP3</h2>
+      <button id="clearStorage">Clear titles</button>
+      <br>
+      <div id="savedIds" class="container"></div>
+    </main>
+    <p>
+      <strong>By Ska Dev</strong>
+    </p>
+  </body>
+</html>

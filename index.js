@@ -4,7 +4,7 @@ var app = express()
 var ytdl = require("ytdl-core")
 var cors = require("cors")
 var path = require("path")
-var getVideoDuration = require("./getVideoDuration.js")
+// var getVideoDuration = require("./getVideoDuration.js")
 var ffmpeg = require("fluent-ffmpeg")
 
 // If production use absolute path
@@ -64,8 +64,8 @@ app.get("/stream/:id", async (req, res) => {
 
     console.log("New video to convert, ID=", videoId)
     // Get video duration
-    if ((await getVideoDuration(videoId)) > 1200)
-      return res.status(500).send("Video too long (over 20min)")
+    // if ((await getVideoDuration(videoId)) > 1200)
+    //   return res.status(500).send("Video too long (over 20min)")
 
     ffmpegMp3Conversion()
   } catch (error) {

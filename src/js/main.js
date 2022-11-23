@@ -1,4 +1,6 @@
-import serverURL from "./serverURL"
+// import serverURL from "./serverURL.js"
+// const serverURL = require("./serverURL.js")
+
 
 // const url = "http://localhost:4000"
 const url = serverURL

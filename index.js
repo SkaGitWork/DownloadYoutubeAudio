@@ -68,6 +68,7 @@ app.get("/stream/:id", async (req, res) => {
     //   return res.status(500).send("Video too long (over 20min)")
 
     ffmpegMp3Conversion()
+    res.send("Done")
   } catch (error) {
     console.log(error)
   }
@@ -84,8 +85,6 @@ app.get("/stream/:id", async (req, res) => {
     proc.saveToFile(path)
     proc.on("end", () => {
       console.log("Upload completed")
-      // Return response
-      return res.send("Done")
     })
   }
 })

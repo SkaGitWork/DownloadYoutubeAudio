@@ -1,7 +1,6 @@
 // import serverURL from "./serverURL.js"
 // const serverURL = require("./serverURL.js")
 
-
 // const url = "http://localhost:4000"
 const url = serverURL
 var youTubePlayer, youTubeLeftControls, downloadAudioMP3Btn, downloadStatus
@@ -18,14 +17,14 @@ function displayButton() {
     youTubeLeftControls = $(".ytp-left-controls")
     // We create an element where we display the status
     downloadStatus = $("<span></span>")
+    downloadStatus.css("cursor", "pointer")
 
     // The donwload button will be an image
     downloadAudioMP3Btn = $("<img>", {
       class: "download-btn",
       // We get the image with 'chrome.runtime.getURL(pathName)'
       src: chrome.runtime.getURL("assets/downloadLogo.png"),
-      style:
-        "height : 30px;align-self : center;margin-right : 10px;",
+      style: "height : 30px;align-self : center;margin-right : 10px;",
       title: "Download MP3",
     })
 
@@ -33,7 +32,7 @@ function displayButton() {
     youTubeLeftControls.append(downloadAudioMP3Btn)
     youTubeLeftControls.append(downloadStatus)
   }
-  
+
   downloadVideo()
 }
 
@@ -50,12 +49,10 @@ chrome.runtime.onMessage.addListener((message) => {
 })
 
 async function downloadVideo() {
-
   // If video > 20 minutes then stop download
   if (youTubePlayer.duration > 1200) return downloadStatus.html("Too long")
-  
-  downloadStatus.html("Generating...")
-  
+
+  downloadStatus.html("Convert to MP3")
 
   // Get video id
   const queryParameters = window.location.href.split("?")[1]
@@ -78,21 +75,18 @@ async function downloadVideo() {
     downloadStatus.css("color", "red")
   }
 
-  // Request a MP3 conversion
-  await fetch(url + "/stream/" + videoId)
+  downloadAudioMP3Btn.click(async () => {
+    downloadStatus.html("Converting...")
+    // Request a MP3 conversion
+    await fetch(url + "/stream/" + videoId)
 
-  // Get the audio from the server storage
-  fetch(url + `/Audio/${videoId}.mp3`)
-    // Convert it to blob for intant download 
-    .then((response) => response.blob())
-    .then((blob) => {
-      const blobURL = URL.createObjectURL(blob)
+    // Get the audio from the server storage
+    fetch(url + `/Audio/${videoId}.mp3`)
+      // Convert it to blob for intant download
+      .then((response) => response.blob())
+      .then((blob) => {
+        const blobURL = URL.createObjectURL(blob)
 
-      downloadStatus.css("cursor", "pointer")
-      downloadStatus.html("MP3")
-
-      // On click -> download file with chrome.downloads
-      downloadAudioMP3Btn.click(() => {
         downloadStatus.html("Downloaded")
 
         // Send message to background
@@ -103,9 +97,8 @@ async function downloadVideo() {
           filename: document.title.replace(" - YouTube", ""),
         })
       })
-    })
-    .catch((err) => {
-      downloadAudioMP3Btn.innerHTML = "Retry later"
-    })
+      .catch((err) => {
+        downloadAudioMP3Btn.innerHTML = "Retry later"
+      })
+  })
 }
-

@@ -84,7 +84,10 @@ app.get("/stream/:id", async (req, res) => {
     proc.saveToFile(path)
     proc.on("end", () => {
       console.log("Upload completed")
-      res.send("Done")
+
+      setTimeout(() => {
+        res.send("Done")
+      }, 1000 * 10)
     })
   }
 })

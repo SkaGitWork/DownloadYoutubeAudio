@@ -3,9 +3,15 @@
 
 // const url = "http://localhost:4000"
 const url = serverURL
-var youTubePlayer, youTubeLeftControls, downloadAudioMP3Btn, downloadStatus
+var youTubePlayer, youTubeLeftControls, downloadAudioMP3Btn, downloadStatus,videoId
 
 function displayButton() {
+
+  // Get video id
+  const queryParameters = window.location.href.split("?")[1]
+  const urlParameters = new URLSearchParams(queryParameters)
+  videoId = urlParameters.get("v")
+
   const downloadAudioMP3BtnExist = $(".download-btn")[0]
 
   // If the button is not loaded
@@ -18,6 +24,7 @@ function displayButton() {
     // We create an element where we display the status
     downloadStatus = $("<span></span>")
     downloadStatus.css("cursor", "pointer")
+    downloadStatus.css("color", "white")
 
     // The donwload button will be an image
     downloadAudioMP3Btn = $("<img>", {
@@ -54,11 +61,6 @@ async function downloadVideo() {
 
   downloadStatus.html("Convert to MP3")
 
-  // Get video id
-  const queryParameters = window.location.href.split("?")[1]
-  const urlParameters = new URLSearchParams(queryParameters)
-  const videoId = urlParameters.get("v")
-
   // Check if already downloaded
   let { downloadedVideos } = await chrome.storage.local.get([
     "downloadedVideos",
@@ -75,30 +77,30 @@ async function downloadVideo() {
     downloadStatus.css("color", "red")
   }
 
-  downloadAudioMP3Btn.click(async () => {
-    downloadStatus.html("Converting...")
-    // Request a MP3 conversion
-    await fetch(url + "/stream/" + videoId)
-
-    // Get the audio from the server storage
-    fetch(url + `/Audio/${videoId}.mp3`)
-      // Convert it to blob for intant download
-      .then((response) => response.blob())
-      .then((blob) => {
-        const blobURL = URL.createObjectURL(blob)
-
-        downloadStatus.html("Downloaded")
-
-        // Send message to background
-        chrome.runtime.sendMessage({
-          type: "DOWNLOAD_REQUEST",
-          videoId: videoId,
-          url: blobURL,
-          filename: document.title.replace(" - YouTube", ""),
-        })
-      })
-      .catch((err) => {
-        downloadAudioMP3Btn.innerHTML = "Retry later"
-      })
-  })
 }
+downloadAudioMP3Btn.click(async () => {
+  downloadStatus.html("Converting...")
+  // Request a MP3 conversion
+  await fetch(url + "/stream/" + videoId)
+
+  // Get the audio from the server storage
+  fetch(url + `/Audio/${videoId}.mp3`)
+    // Convert it to blob for intant download
+    .then((response) => response.blob())
+    .then((blob) => {
+      const blobURL = URL.createObjectURL(blob)
+
+      downloadStatus.html("Downloaded")
+
+      // Send message to background
+      chrome.runtime.sendMessage({
+        type: "DOWNLOAD_REQUEST",
+        videoId: videoId,
+        url: blobURL,
+        filename: document.title.replace(" - YouTube", ""),
+      })
+    })
+    .catch((err) => {
+      downloadAudioMP3Btn.innerHTML = "Retry later"
+    })
+})
